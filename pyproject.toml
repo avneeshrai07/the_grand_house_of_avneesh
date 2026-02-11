@@ -1,0 +1,23 @@
+"""
+Awesome AI Toolkit - A comprehensive library for AI agents, RAG, and web scraping.
+"""
+
+__version__ = "0.1.0"
+__author__ = "Your Name"
+
+# Import key classes/functions from subpackages for convenience
+from .agents import OpenAIAgent, AnthropicAgent
+from .rag import VectorStore, Retriever
+from .scrapers import NewsScraper, LinkedInScraper
+from .common.exceptions import ToolkitError, AgentError, RAGError, ScraperError
+
+# Define what's available when someone does: from awesome_ai_toolkit import *
+__all__ = [
+    "OpenAIAgent",
+    "AnthropicAgent", 
+    "VectorStore",
+    "Retriever",
+    "NewsScraper",
+    "LinkedInScraper",
+    "ToolkitError",
+]
