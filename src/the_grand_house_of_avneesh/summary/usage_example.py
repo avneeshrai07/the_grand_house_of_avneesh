@@ -5,7 +5,7 @@ Demonstrates basic and advanced usage patterns
 
 import asyncio
 from text_summarizer import TextSummarizer
-from exceptions import SummarizationError, NLPProcessingError
+from src.the_grand_house_of_avneesh.summary.utility.exceptions import SummarizationError, NLPProcessingError
 
 
 async def basic_example():
