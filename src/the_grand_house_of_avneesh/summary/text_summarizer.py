@@ -91,7 +91,7 @@ class TextSummarizer:
             logger.info("=" * 80)
 
     def _initialize_spacy(self):
-        """Initialize SpaCy NLP model with error handling."""
+        """Initialize SpaCy NLP model with automatic download fallback."""
         try:
             if self.config.debug:
                 logger.info(f"📚 Loading SpaCy model: {self.config.spacy_model}...")
@@ -101,14 +101,44 @@ class TextSummarizer:
             if self.config.debug:
                 logger.info("✅ SpaCy model loaded successfully")
 
-        except OSError as e:
-            error_msg = (
-                f"❌ SpaCy model '{self.config.spacy_model}' not found.\n"
-                f"\nInstall it using:\n"
-                f"  python -m spacy download {self.config.spacy_model}\n"
-            )
-            logger.error(error_msg)
-            raise NLPProcessingError(error_msg) from e
+        except OSError:
+            # Model not found - attempt automatic download
+            logger.warning(f"⚠️  SpaCy model '{self.config.spacy_model}' not found. Downloading automatically...")
+            
+            try:
+                import subprocess
+                import sys
+                
+                logger.info(f"📦 Downloading {self.config.spacy_model}... (this may take a minute)")
+                
+                # Download the model
+                subprocess.check_call(
+                    [sys.executable, "-m", "spacy", "download", self.config.spacy_model],
+                    stdout=subprocess.DEVNULL if not self.config.debug else None,
+                    stderr=subprocess.DEVNULL if not self.config.debug else None
+                )
+                
+                logger.info(f"✅ Successfully downloaded '{self.config.spacy_model}'")
+                
+                # Try loading again
+                self.nlp = spacy.load(self.config.spacy_model)
+                
+                if self.config.debug:
+                    logger.info("✅ SpaCy model loaded successfully after download")
+                    
+            except subprocess.CalledProcessError as e:
+                error_msg = (
+                    f"❌ Failed to automatically download SpaCy model '{self.config.spacy_model}'.\n"
+                    f"\nPlease install it manually using:\n"
+                    f"  python -m spacy download {self.config.spacy_model}\n"
+                )
+                logger.error(error_msg)
+                raise NLPProcessingError(error_msg) from e
+            except Exception as e:
+                error_msg = f"❌ Unexpected error during SpaCy initialization: {str(e)}"
+                logger.error(error_msg)
+                raise NLPProcessingError(error_msg) from e
+
 
     def _initialize_bedrock(self):
         """Initialize AWS Bedrock client with error handling."""
