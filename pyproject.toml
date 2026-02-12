@@ -1,43 +1,58 @@
-# pyproject.toml
-
 [build-system]
 requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "The-Grand-House-of-Avneesh"
+# Distribution name on PyPI (what users type in pip install)
+name = "the-grand-house-of-avneesh"
 version = "0.0.0"
 description = "The Grand House of Avneesh is a private sanctuary of knowledge, built upon discipline, inquiry, and intellectual sovereignty. It stands as a living archive of ideas — preserving wisdom, cultivating reason, and fostering mastery across generations. Within its walls, thought is sharpened, curiosity is honored, and knowledge is treated not as information, but as power."
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [{ name = "Avneesh", email = "ofc.avneesh@gmail.com" }]
-license = { file = "LICENSE" }
+
+# Modern license metadata (avoid deprecated { file = "LICENSE" })
+license = "MIT"
+license-files = ["LICENSE"]  # include the license file in built distributions
+# If you have multiple: ["LICENSE*", "COPYING*", "NOTICE*"] is common. [web:17]
 
 classifiers = [
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Operating System :: MacOS :: MacOS X",
-    "Operating System :: Microsoft :: Windows",
-    "Intended Audience :: Education"
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Operating System :: MacOS :: MacOS X",
+  "Operating System :: Microsoft :: Windows",
+  "Intended Audience :: Education"
 ]
+# Note: packaging guidance suggests avoiding the "License ::" classifier
+# when using SPDX license strings. [web:17]
 
 dependencies = [
-    spacy>=3.7.0
-    scikit-learn>=1.3.0
-    langchain-aws>=0.1.0
-    python-dotenv>=1.0.0
-    numpy>=1.24.0
-    boto3>=1.28.0
-    botocore>=1.31.0
+  "spacy>=3.7.0",
+  "scikit-learn>=1.3.0",
+  "langchain-aws>=0.1.0",
+  "python-dotenv>=1.0.0",
+  "numpy>=1.24.0",
+  "boto3>=1.28.0",
+  "botocore>=1.31.0"
 ]
-
 
 [project.optional-dependencies]
 dev = [
-    "setuptools",
-    "wheel",
-    "build",
-    "twine",
-    "pytest"
+  "build",
+  "twine",
+  "pytest"
 ]
+
+
+
+
+
+
+# --- setuptools config for src/ layout ---
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+# Optional safety: restrict what gets packaged
+# include = ["the_grand_house_of_avneesh*"]
