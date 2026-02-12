@@ -1,10 +1,19 @@
-"""
-The Grand House of Avneesh - Text Summarization Module
-Exports main classes and utilities for text summarization
-"""
-
-from .text_summarizer import TextSummarizer
-from .utility.exceptions import SummarizationError, NLPProcessingError
+from .text_summarizer import TextSummarizer, create_summarizer
+from .utils.exceptions import (
+    SummarizationError,
+    NLPProcessingError,
+    LLMError,
+    ValidationError,
+    ConfigurationError
+)
+from .utils.config.settings import SummarizerConfig
 
 __version__ = "1.0.0"
-__all__ = ["TextSummarizer", "SummarizationError", "NLPProcessingError"]
+__author__ = "The Grand House of Avneesh"
+__email__ = "contact@grandhouse.dev"
+
+__all__ = [
+    # Main classes and functions
+    "TextSummarizer",
+    "create_summarizer"
+]
